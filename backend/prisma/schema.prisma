@@ -1,0 +1,79 @@
+// This is the Prisma schema for FuelEU Maritime Compliance Platform
+// It maps directly to the domain model described in the FuelEU regulation requirements
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// A maritime route with associated fuel and emission data
+model Route {
+  id               String  @id @default(uuid())
+  routeId          String  @unique @map("route_id")
+  vesselType       String  @map("vessel_type")
+  fuelType         String  @map("fuel_type")
+  year             Int
+  ghgIntensity     Float   @map("ghg_intensity")
+  fuelConsumption  Float   @map("fuel_consumption")
+  distance         Float
+  totalEmissions   Float   @map("total_emissions")
+  isBaseline       Boolean @default(false) @map("is_baseline")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("routes")
+}
+
+/// Ship compliance record for a given year (Article 4 FuelEU)
+model ShipCompliance {
+  id         String @id @default(uuid())
+  shipId     String @map("ship_id")
+  year       Int
+  cbGco2eq   Float  @map("cb_gco2eq") // Compliance Balance in gCO2eq
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([shipId, year])
+  @@map("ship_compliance")
+}
+
+/// Banking entries — surplus stored under Article 20
+model BankEntry {
+  id          String @id @default(uuid())
+  shipId      String @map("ship_id")
+  year        Int
+  amountGco2eq Float @map("amount_gco2eq") // Positive = banked surplus
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("bank_entries")
+}
+
+/// Pool grouping header (Article 21)
+model Pool {
+  id        String @id @default(uuid())
+  year      Int
+  createdAt DateTime @default(now()) @map("created_at")
+
+  members PoolMember[]
+
+  @@map("pools")
+}
+
+/// Individual pool member with CB before/after pooling
+model PoolMember {
+  poolId   String @map("pool_id")
+  shipId   String @map("ship_id")
+  cbBefore Float  @map("cb_before")
+  cbAfter  Float  @map("cb_after")
+
+  pool Pool @relation(fields: [poolId], references: [id], onDelete: Cascade)
+
+  @@id([poolId, shipId])
+  @@map("pool_members")
+}
