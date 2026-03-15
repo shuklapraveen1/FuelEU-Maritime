@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  body {
+    @apply bg-slate-950 text-slate-200;
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-white/10 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-white/20;
+  }
+
+  /* Custom selection colour */
+  ::selection {
+    @apply bg-ocean-500/40 text-white;
+  }
+
+  /* Focus ring reset — handled per-component */
+  :focus {
+    outline: none;
+  }
+}
+
+@layer components {
+  /* Subtle grid background on main content area */
+  .bg-grid {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* Glass panel */
+  .glass {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10;
+  }
+}
+
+@layer utilities {
+  /* Opacity utilities that Tailwind doesn't generate */
+  .border-white\/8 {
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+  .bg-white\/3 {
+    background-color: rgba(255, 255, 255, 0.03);
+  }
+  .bg-white\/8 {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+  .bg-white\/12 {
+    background-color: rgba(255, 255, 255, 0.12);
+  }
+  .hover\:bg-white\/3:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+  }
+}
+
+/* Recharts custom */
+.recharts-cartesian-axis-tick-value {
+  font-family: 'JetBrains Mono', monospace;
+}
