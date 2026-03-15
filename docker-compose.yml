@@ -1,0 +1,61 @@
+version: '3.9'
+
+services:
+  # ─── PostgreSQL ────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: fueleu-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: fueleu
+      POSTGRES_PASSWORD: fueleu
+      POSTGRES_DB: fueleu_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U fueleu -d fueleu_db']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── Backend ───────────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: fueleu-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://fueleu:fueleu@postgres:5432/fueleu_db
+      PORT: 4000
+      NODE_ENV: production
+      CORS_ORIGIN: http://localhost:5173
+    ports:
+      - '4000:4000'
+    healthcheck:
+      test: ['CMD', 'wget', '-qO-', 'http://localhost:4000/health']
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  # ─── Frontend ──────────────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: http://localhost:4000/api
+    container_name: fueleu-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - '5173:80'
+
+volumes:
+  postgres_data:
