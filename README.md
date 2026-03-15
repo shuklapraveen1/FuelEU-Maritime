@@ -191,7 +191,7 @@ FuelEU-Maritime/
 
 ```bash
 # Clone and start everything
-git clone <repo>
+git clone https://github.com/shuklapraveen1/FuelEU-Maritime.git
 cd FuelEU-Maritime
 
 docker-compose up --build
@@ -308,7 +308,7 @@ npm run test:coverage
 
 ### Backend (`.env`)
 ```env
-DATABASE_URL="postgresql://fueleu:fueleu@localhost:5432/fueleu_db"
+DATABASE_URL="postgresql://fueleu:fueleu@localhost:5433/fueleu_db"
 PORT=4000
 NODE_ENV=development
 CORS_ORIGIN=http://localhost:5173

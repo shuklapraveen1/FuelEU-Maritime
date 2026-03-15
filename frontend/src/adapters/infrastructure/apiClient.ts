@@ -54,41 +54,41 @@ export interface RouteFilters {
 
 export const routesApi = {
   getAll: (filters?: RouteFilters): Promise<Route[]> =>
-    http.get('/routes', { params: filters }).then(unwrap),
+    http.get<{ data: Route[] }>('/routes', { params: filters }).then(unwrap),
 
   setBaseline: (routeId: string): Promise<Route> =>
-    http.post(`/routes/${routeId}/baseline`).then(unwrap),
+    http.post<{ data: Route }>(`/routes/${routeId}/baseline`).then(unwrap),
 
   getComparison: (): Promise<RouteComparison[]> =>
-    http.get('/routes/comparison').then(unwrap),
+    http.get<{ data: RouteComparison[] }>('/routes/comparison').then(unwrap),
 };
 
 // ─── Compliance ───────────────────────────────────────────────────────────────
 
 export const complianceApi = {
   getBalances: (): Promise<ComplianceBalance[]> =>
-    http.get('/compliance/cb').then(unwrap),
+    http.get<{ data: ComplianceBalance[] }>('/compliance/cb').then(unwrap),
 
   getAdjustedBalances: (): Promise<AdjustedComplianceBalance[]> =>
-    http.get('/compliance/adjusted-cb').then(unwrap),
+    http.get<{ data: AdjustedComplianceBalance[] }>('/compliance/adjusted-cb').then(unwrap),
 };
 
 // ─── Banking ──────────────────────────────────────────────────────────────────
 
 export const bankingApi = {
   getRecords: (): Promise<BankEntry[]> =>
-    http.get('/banking/records').then(unwrap),
+    http.get<{ data: BankEntry[] }>('/banking/records').then(unwrap),
 
   bankSurplus: (shipId: string, year: number): Promise<ComplianceBalance> =>
-    http.post('/banking/bank', { shipId, year }).then(unwrap),
+    http.post<{ data: ComplianceBalance }>('/banking/bank', { shipId, year }).then(unwrap),
 
   applyBanked: (shipId: string, year: number): Promise<ComplianceBalance> =>
-    http.post('/banking/apply', { shipId, year }).then(unwrap),
+    http.post<{ data: ComplianceBalance }>('/banking/apply', { shipId, year }).then(unwrap),
 };
 
 // ─── Pooling ──────────────────────────────────────────────────────────────────
 
 export const poolingApi = {
   createPool: (year: number, shipIds: string[]): Promise<Pool> =>
-    http.post('/pools', { year, shipIds }).then(unwrap),
+    http.post<{ data: Pool }>('/pools', { year, shipIds }).then(unwrap),
 };

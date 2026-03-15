@@ -20,7 +20,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 # Install only production deps + wget for health checks
-RUN apk add --no-cache wget
+RUN apk add --no-cache wget openssl
 
 COPY package*.json ./
 RUN npm ci --omit=dev

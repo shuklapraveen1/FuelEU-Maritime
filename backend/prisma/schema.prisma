@@ -2,7 +2,8 @@
 // It maps directly to the domain model described in the FuelEU regulation requirements
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {

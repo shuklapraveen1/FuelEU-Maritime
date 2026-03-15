@@ -100,19 +100,22 @@ export function PoolingPage() {
                 value={String(selectedIds.size)}
                 sub="Minimum 2 required"
                 variant="neutral"
-              />
+              >
+              </KpiCard>
               <KpiCard
                 label="Pool Sum"
                 value={formatCB(poolSum)}
                 sub="Must be ≥ 0 for valid pool"
                 variant={poolSum >= 0 ? 'positive' : 'negative'}
-              />
+              >
+              </KpiCard>
               <KpiCard
                 label="Pool Status"
                 value={poolSum >= 0 ? 'Valid' : 'Invalid'}
                 sub={poolSum >= 0 ? 'Ready to create' : 'Add more surplus ships'}
                 variant={poolSum >= 0 ? 'positive' : 'negative'}
-              />
+              >
+              </KpiCard>
             </div>
           )}
 
@@ -145,7 +148,7 @@ export function PoolingPage() {
                 <Table>
                   <thead>
                     <tr>
-                      <Th className="w-10" />
+                      <Th> className="w-10" </Th>
                       <Th>Ship ID</Th>
                       <Th>Year</Th>
                       <Th>Adjusted CB</Th>

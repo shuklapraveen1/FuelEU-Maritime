@@ -34,13 +34,19 @@ export function ComparePage() {
   const { data: routes } = useRoutes();
 
   const baseline = routes?.find((r) => r.isBaseline);
-
-  const chartData = comparison
+  type ChartRow = {
+  name: string
+  intensity: number
+  isBaseline: boolean
+  isCompliant: boolean
+  }
+  const chartData: ChartRow[] = comparison
     ? [
         {
-          name: comparison[0]?.baselineRouteId ?? 'Baseline',
-          intensity: comparison[0]?.baselineIntensity ?? 0,
-          isBaseline: true,
+        name: comparison[0]?.baselineRouteId ?? 'Baseline',
+        intensity: comparison[0]?.baselineIntensity ?? 0,
+        isBaseline: true,
+        isCompliant: true,
         },
         ...(comparison ?? []).map((c) => ({
           name: c.comparisonRouteId,
